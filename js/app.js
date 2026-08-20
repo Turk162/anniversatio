@@ -191,9 +191,21 @@ const App = (() => {
       // piccola pausa per dare la sensazione di un'analisi reale
       await new Promise((r) => setTimeout(r, 1400));
 
-      const plausibility = Camera.capturePlausibility();
-      const geoResult = await Geo.checkTappaLocation(item);
-      const success = plausibility.plausible && geoResult.ok;
+      // Dopo il primo tentativo fallito le abbiamo già mostrato la foto
+      // del soggetto giusto: da lì in poi sappiamo che sta inquadrando
+      // la cosa giusta, quindi lo scatto passa sempre e senza altri
+      // controlli — meglio lasciarla proseguire che rischiare di
+      // bloccarla con un GPS impreciso proprio nel momento clou.
+      const passaggioLibero = state.attempts >= 1;
+
+      let success;
+      if (passaggioLibero) {
+        success = true;
+      } else {
+        const plausibility = Camera.capturePlausibility();
+        const geoResult = await Geo.checkTappaLocation(item);
+        success = plausibility.plausible && geoResult.ok;
+      }
 
       if (success) {
         feedback.classList.remove("error");
