@@ -47,6 +47,12 @@ Quando potrai raggiungere le location reali:
    non è stato fatto un sopralluogo fisico e il GPS in centri storici/vicoli può essere
    impreciso.
 3. Scrivi i testi reali degli indizi (`clue`, `targetLabel`, `targetHint`).
+   Ogni tappa ha anche un campo `hintImage`: è la foto mostrata quando lo
+   scan fallisce ("Sei proprio sicura? La signora Flethcher forse ti
+   consiglierebbe di cercare questo:") — sostituisci i placeholder in
+   `assets/images/` con le foto reali degli elementi da inquadrare.
+   Nota: la Tappa 1 ha il raggio GPS a 5 metri solo per un test sul campo —
+   riportalo a un valore ampio (60-100m) prima dell'evento vero.
 4. Sostituisci le immagini placeholder in `assets/images/` con i veri screenshot dei
    percorsi (stesso nome file, oppure cambia i percorsi in `routeImages`).
 5. Compila `FINALE` con il percorso verso il negozio, i testi generici di percorso/scan

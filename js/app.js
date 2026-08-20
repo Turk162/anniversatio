@@ -126,6 +126,7 @@ const App = (() => {
           </div>
         </div>
         <p id="scan-feedback" class="scan-feedback"></p>
+        <img id="hint-image" class="hint-image hidden" alt="Suggerimento" />
         <button class="btn btn-primary" id="btn-shoot">Inquadra e scatta</button>
         <p id="help-link" class="help-link hidden">
           <a href="#" id="link-help">Qualcosa non va? Continua comunque →</a>
@@ -135,6 +136,7 @@ const App = (() => {
 
     const video = document.getElementById("camera-video");
     const feedback = document.getElementById("scan-feedback");
+    const hintImage = document.getElementById("hint-image");
     const btnShoot = document.getElementById("btn-shoot");
     const helpLink = document.getElementById("help-link");
 
@@ -168,6 +170,7 @@ const App = (() => {
       btnShoot.disabled = true;
       feedback.classList.remove("error");
       feedback.textContent = "Sto analizzando…";
+      hintImage.classList.add("hidden");
 
       // piccola pausa per dare la sensazione di un'analisi reale
       await new Promise((r) => setTimeout(r, 1400));
@@ -182,8 +185,13 @@ const App = (() => {
         setTimeout(() => advance(), 500);
       } else {
         state.attempts += 1;
-        feedback.textContent = "Non sono riuscita a riconoscerlo bene, riprova inquadrando meglio.";
+        feedback.textContent =
+          "Sei proprio sicura? La signora Flethcher forse ti consiglierebbe di cercare questo: ";
         feedback.classList.add("error");
+        if (item.hintImage) {
+          hintImage.src = item.hintImage;
+          hintImage.classList.remove("hidden");
+        }
         btnShoot.disabled = false;
         if (state.attempts >= 2) {
           helpLink.classList.remove("hidden");

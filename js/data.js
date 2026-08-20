@@ -50,8 +50,12 @@ const TAPPE = [
       "Inquadra bene l'elemento indicato dall'indizio: tienilo al centro del riquadro " +
       "e scatta quando è ben visibile e a fuoco.",
     routeImages: ["assets/images/tratto-0-1.png"],
+    hintImage: "assets/images/tappa1-riferimento.png",
     // Coordinata reale di test fornita dall'utente (non più auto-calibrata).
-    gps: { lat: 40.379800, lng: 17.961010, radius: 80 },
+    // NB: raggio ridotto a 5m SOLO per provare sul campo il messaggio di
+    // "riprova" — prima dell'evento vero va riportato a un valore ampio
+    // (60-100m), vedi nota in CONFIG.defaultRadius più sopra.
+    gps: { lat: 40.379800, lng: 17.961010, radius: 5 },
   },
   {
     id: 2,
@@ -62,6 +66,7 @@ const TAPPE = [
     targetLabel: "Il dettaglio da inquadrare",
     targetHint: "Anche qui: inquadra bene l'elemento al centro e scatta.",
     routeImages: ["assets/images/tratto-1-2.png"],
+    hintImage: "assets/images/tappa2-riferimento.png",
     gps: { useCurrentLocationAsTarget: true, radius: 80 },
   },
   {
@@ -73,6 +78,7 @@ const TAPPE = [
     targetLabel: "Il dettaglio da inquadrare",
     targetHint: "Ultimo scatto: inquadra bene e conferma.",
     routeImages: ["assets/images/tratto-2-3.png"],
+    hintImage: "assets/images/tappa3-riferimento.png",
     gps: { useCurrentLocationAsTarget: true, radius: 80 },
   },
 ];
@@ -86,6 +92,7 @@ const FINALE = {
   targetHint:
     "Sei arrivata? Inquadra bene l'insegna del locale davanti a te per confermare di " +
     "essere nel posto giusto.",
+  hintImage: "assets/images/finale-riferimento.png",
   // Stesso meccanismo soft delle altre tappe: non blocca mai il gioco.
   gps: { useCurrentLocationAsTarget: true, radius: 80 },
   revealTitle: "Sei arrivata da Aromisia!",
