@@ -1,64 +1,59 @@
 # Caccia al Tesoro — Web App d'Anniversario
 
-Web app (PWA) mobile per guidare qualcuno attraverso una caccia al tesoro in 3 tappe:
-indizio → percorso → "inquadra" un dettaglio della strada con la fotocamera → nuovo
-percorso, fino alla tappa finale (il negozio con il regalo).
+Web app (PWA) mobile per guidare qualcuno attraverso una caccia al tesoro a Otranto:
+indizio iniziale (senza mappa) → Tappa 1 (Porta a Terra) → mappa → Tappa 2 (Monumento
+eroi e martiri 1480) → mappa → Tappa 3 (lampione sul Lungomare degli Eroi) → mappa →
+Tappa 4 (Cattedrale) → mappa → traguardo finale, il negozio Aromisia con il regalo.
 
-Nessun build tool: HTML/CSS/JS puro, pensato per girare su GitHub Pages.
+Ad ogni tappa si "inquadra" un dettaglio della strada con la fotocamera per sbloccare la
+successiva.
+
+Nessun build tool: HTML/CSS/JS puro, pubblicato su GitHub Pages tramite il workflow in
+`.github/workflows/pages.yml`.
 
 ## Come funziona lo sblocco delle tappe
 
 Non c'è vero riconoscimento immagine via intelligenza artificiale (sarebbe fragile
 proprio nel momento che conta di più). Lo sblocco si basa su:
 
-1. **GPS "soft"** — se il telefono è entro un certo raggio dalle coordinate della tappa,
-   la posizione è considerata confermata. Il controllo **non blocca mai** il gioco: se il
-   permesso è negato o il segnale è impreciso, si va comunque avanti.
+1. **GPS "soft"** — se il telefono è entro un certo raggio dalle coordinate reali della
+   tappa (attualmente 80 metri, volutamente generoso), la posizione è considerata
+   confermata. Il controllo **non blocca mai** il gioco: se il permesso è negato o il
+   segnale è impreciso, resta comunque possibile sbloccare tramite il fallback di aiuto.
 2. **Euristica sull'inquadratura** (`js/camera.js`) — verifica solo che la fotocamera stia
    inquadrando *qualcosa* (non uno schermo nero o un dito sull'obiettivo), per rinforzare
    la sensazione di scatto/riconoscimento senza vero object detection.
-3. **Fallback "hai bisogno di aiuto?"** — dopo un paio di tentativi o 20 secondi sulla
+3. **Messaggio + foto di aiuto sul fallimento** — se lo scan non va a buon fine, compare
+   "Sei proprio sicura? La signora Flethcher forse ti consiglierebbe di cercare questo:"
+   insieme a una foto di riferimento dell'elemento (campo `hintImage` di ogni tappa).
+4. **Fallback "hai bisogno di aiuto?"** — dopo un paio di tentativi o 20 secondi sulla
    schermata di scatto, compare sempre un link che sblocca comunque la tappa. Serve da
    rete di sicurezza per non rovinare la sorpresa in caso di imprevisti dal vivo.
 
-## Modalità TEST (adesso) vs contenuti REALI (dopo)
+## Contenuti — `js/data.js`
 
 Tutto il contenuto del gioco vive in **`js/data.js`**, l'unico file da modificare.
 
-Al momento `CONFIG.testMode = true` e ogni tappa ha `gps.useCurrentLocationAsTarget: true`:
-la prima volta che l'app chiede la posizione per una tappa, usa la posizione attuale del
-telefono come bersaglio per quella tappa in quella sessione di gioco. Così puoi testare
-**tutto il flusso reale** (permessi, GPS, fotocamera, animazioni, fallback) restando dove ti
-trovi ora, senza dover raggiungere i luoghi veri.
+Le coordinate GPS di tutte le tappe e del negozio finale sono già quelle **reali**
+(`CONFIG.testMode = false`). Cosa manca ancora, da sostituire quando disponibile:
 
-Quando potrai raggiungere le location reali:
+1. **Screenshot dei percorsi** (`routeImages` di ogni tappa e di `FINALE`) — sono ancora
+   placeholder generati automaticamente in `assets/images/tratto-*.png`. Vanno sostituiti
+   con i 4 screenshot reali di Google Maps (i tratti dopo la Tappa 1, che invece non ha
+   mappa: va trovata solo con l'indovinello iniziale).
+2. **Foto di riferimento** (`hintImage` di ogni tappa e di `FINALE`) — sono ancora
+   placeholder in `assets/images/tappaN-riferimento.png` / `finale-riferimento.png`.
+   Vanno sostituite con le foto reali degli elementi da inquadrare (stesso nome file, o
+   cambia i path in `data.js`). Nota: queste foto compaiono **solo** quando uno scan
+   fallisce, come aiuto — non vengono mai mostrate prima.
+3. I testi degli indizi (`clue`) sono già stati inseriti e leggermente corretti
+   (punteggiatura/refusi) rispetto alle bozze fornite: rileggili e adattali se qualcosa
+   non suona giusto.
 
-1. In `js/data.js` metti `CONFIG.testMode = false`.
-2. Per ogni tappa, sostituisci
-   ```js
-   gps: { useCurrentLocationAsTarget: true, radius: 80 }
-   ```
-   con le coordinate reali, ad esempio:
-   ```js
-   gps: { lat: 40.1495, lng: 18.4715, radius: 80 }
-   ```
-   Le coordinate si ottengono da Google Maps: tieni premuto sul punto esatto sulla mappa,
-   compare "lat, lng" da copiare. Il raggio è in metri: tienilo generoso (60–100m) perché
-   non è stato fatto un sopralluogo fisico e il GPS in centri storici/vicoli può essere
-   impreciso.
-3. Scrivi i testi reali degli indizi (`clue`, `targetLabel`, `targetHint`).
-   Ogni tappa ha anche un campo `hintImage`: è la foto mostrata quando lo
-   scan fallisce ("Sei proprio sicura? La signora Flethcher forse ti
-   consiglierebbe di cercare questo:") — sostituisci i placeholder in
-   `assets/images/` con le foto reali degli elementi da inquadrare.
-   Nota: la Tappa 1 ha il raggio GPS a 5 metri solo per un test sul campo —
-   riportalo a un valore ampio (60-100m) prima dell'evento vero.
-4. Sostituisci le immagini placeholder in `assets/images/` con i veri screenshot dei
-   percorsi (stesso nome file, oppure cambia i percorsi in `routeImages`).
-5. Compila `FINALE` con il percorso verso il negozio, i testi generici di percorso/scan
-   (`routeClue`, `targetHint`) e il messaggio di rivelazione (`revealTitle`,
-   `revealMessage`) — questi ultimi sono gli unici punti dove compare il nome del
-   negozio: il resto del flusso non lo anticipa mai, nemmeno durante lo scan finale.
+Il nome del negozio finale ("Aromisia") compare **solo** in `FINALE.revealTitle` /
+`FINALE.revealMessage`, mostrati esclusivamente dopo lo scan finale riuscito: il resto
+del flusso (percorso e scan davanti al negozio) parla solo genericamente di "il
+traguardo", per non anticipare la sorpresa.
 
 Per azzerare il progresso salvato durante un test, apri la console del browser e lancia:
 ```js
@@ -74,21 +69,18 @@ python3 -m http.server 8080
 Poi apri `http://localhost:8080` su un browser desktop.
 
 **Attenzione:** fotocamera e geolocalizzazione richiedono un *contesto sicuro* (HTTPS, o
-`localhost` sullo stesso dispositivo). Per testare davvero su uno smartphone reale, il modo
-più semplice è pubblicare su GitHub Pages (vedi sotto) e aprire l'URL `https://...` dal
-telefono.
+`localhost` sullo stesso dispositivo). Per testare davvero su uno smartphone reale, apri
+l'URL pubblicato su GitHub Pages dal telefono.
 
 ## Pubblicazione su GitHub Pages
 
-1. Fai il merge di questo branch su `main` (o apri una Pull Request).
-2. Nel repository su GitHub: **Settings → Pages** → sotto "Build and deployment" scegli
-   "Deploy from a branch", branch `main`, cartella `/ (root)`.
-3. Dopo qualche minuto l'app sarà raggiungibile su
-   `https://<utente>.github.io/<repo>/`.
-4. Apri quell'URL dal telefono, concedi i permessi di fotocamera e posizione quando
-   richiesti, e prova l'intero percorso.
-5. Da Safari/Chrome mobile puoi usare "Aggiungi a schermata Home" per farla comportare
-   come un'app installata.
+Il deploy è automatico: ogni push sul branch `claude/treasure-hunt-camera-app-u0rsda`
+fa scattare il workflow `.github/workflows/pages.yml`, che pubblica il sito in 1-2
+minuti su `https://turk162.github.io/anniversatio/`. Nessuna azione manuale necessaria
+dopo il primo setup (Settings → Pages → Source: "GitHub Actions").
+
+Da Safari/Chrome mobile si può usare "Aggiungi a schermata Home" per farla comportare
+come un'app installata.
 
 ## Struttura dei file
 
@@ -96,12 +88,13 @@ telefono.
 index.html              shell della SPA
 css/style.css            tema visivo
 js/data.js               CONTENUTI del gioco (indizi, GPS, immagini) — file da editare
-js/geo.js                geolocalizzazione, calcolo distanza, calibrazione modalità test
+js/geo.js                geolocalizzazione, calcolo distanza
 js/camera.js             gestione fotocamera ed euristica sull'inquadratura
 js/app.js                macchina a stati che pilota le schermate
 manifest.webmanifest     manifest PWA ("aggiungi a schermata Home")
 sw.js                    service worker per funzionare anche con connessione scarsa
-assets/images/           screenshot dei percorsi (ora placeholder, da sostituire)
+.github/workflows/pages.yml   deploy automatico su GitHub Pages ad ogni push
+assets/images/           screenshot dei percorsi e foto di riferimento (placeholder, da sostituire)
 assets/icons/            icone della PWA
 ```
 
