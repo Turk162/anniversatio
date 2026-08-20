@@ -46,6 +46,7 @@ const App = (() => {
     try {
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem("caccia_geo_calibrazione");
+      localStorage.removeItem("caccia_nogps");
     } catch (e) {}
     state = { ...defaultState };
     render();
@@ -79,6 +80,7 @@ const App = (() => {
         <p class="hint">${INTRO.hint}</p>
         <button class="btn btn-primary" id="btn-start">${INTRO.startButton}</button>
         ${CONFIG.testMode ? '<p class="test-badge">Modalità TEST attiva</p>' : ""}
+        ${CONFIG.skipGpsCheck ? '<p class="test-badge">Controllo GPS disattivato</p>' : ""}
       </div>
     `;
     document.getElementById("btn-start").addEventListener("click", onStart);

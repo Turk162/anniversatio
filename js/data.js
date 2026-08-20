@@ -31,12 +31,37 @@ const CONFIG = {
   // flusso da casa senza dover raggiungere le location reali. Le
   // coordinate reali qui sotto restano intatte: rimetti a false prima
   // dell'evento vero, è l'unico interruttore da cambiare.
-  skipGpsCheck: true,
+  skipGpsCheck: false,
   // Raggio di default (metri) entro cui il GPS "conferma" la tappa.
   // Ampio di proposito: il controllo GPS è volutamente permissivo e
   // non deve mai bloccare la sorpresa.
   defaultRadius: 80,
 };
+
+// -------------------------------------------------------------
+// PIANO B — interruttore d'emergenza via indirizzo
+// -------------------------------------------------------------
+// Se sul posto il GPS non collabora, basta aprire la pagina con
+// ?nogps in fondo all'indirizzo (o usare il collegamento breve in
+// senza-gps/) e il controllo GPS resta disattivato per tutta la
+// partita: la scelta viene ricordata sul telefono, quindi regge
+// anche a un ricaricamento o alla riapertura dell'app.
+// Per tornare al comportamento normale si apre la pagina con ?gps.
+(function interruttoreEmergenzaGps() {
+  if (typeof location === "undefined") return;
+  const CHIAVE = "caccia_nogps";
+  const chiedeNoGps = /[?&]nogps\b/.test(location.search);
+  const chiedeGps = /[?&]gps\b/.test(location.search);
+  try {
+    if (chiedeNoGps) localStorage.setItem(CHIAVE, "1");
+    else if (chiedeGps) localStorage.removeItem(CHIAVE);
+    if (localStorage.getItem(CHIAVE) === "1") CONFIG.skipGpsCheck = true;
+  } catch (e) {
+    // localStorage non disponibile: applichiamo comunque il parametro,
+    // solo senza ricordarlo dopo un ricaricamento.
+    if (chiedeNoGps) CONFIG.skipGpsCheck = true;
+  }
+})();
 
 // Schermata di apertura: la locandina del "caso".
 const INTRO = {

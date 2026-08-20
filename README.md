@@ -53,9 +53,35 @@ Le coordinate GPS di tutte le tappe e del negozio finale sono già quelle **real
    file). Se l'immagine manca o non si carica, la schermata di apertura mostra
    automaticamente titolo e sottotitolo come testo, quindi non resta mai vuota.
 
-**Nota importante**: `CONFIG.skipGpsCheck` è attualmente `true` — il controllo GPS è
-disattivato per poter provare l'intero flusso da casa. **Va rimesso a `false` prima
-dell'evento vero**, altrimenti qualunque tappa si sblocca subito ovunque ci si trovi.
+## Piano B — la versione senza GPS
+
+Se sul posto il GPS non collabora (vicoli stretti, permesso negato, segnale ballerino),
+esiste un secondo indirizzo che fa girare **la stessa identica app** — stessi testi,
+stesse immagini, stesso avanzamento già salvato — con il solo controllo GPS disattivato:
+
+```
+https://<utente>.github.io/<repo>/senza-gps/
+```
+
+Cosa succede aprendolo:
+
+- reindirizza a `index.html?nogps=1`, quindi **non è una copia** del gioco: nessun rischio
+  che le due versioni vadano fuori sincrono;
+- la partita **riprende dalla tappa in corso**, perché l'avanzamento è salvato per
+  dominio, non per indirizzo: si può passare al piano B a metà caccia senza perdere nulla;
+- la scelta viene **ricordata sul telefono**, quindi regge a un ricaricamento o alla
+  riapertura dell'app;
+- sulla schermata di apertura compare un piccolo avviso «Controllo GPS disattivato», utile
+  per verificare a colpo d'occhio che sia attivo. A gioco iniziato non si vede.
+
+Per tornare al comportamento normale basta aprire la pagina con `?gps`
+(`.../index.html?gps`), oppure lanciare `App.resetGame()` dalla console.
+
+Vale la pena tenere questo indirizzo già pronto sul proprio telefono prima di partire.
+
+**Nota**: `CONFIG.skipGpsCheck` in `js/data.js` è l'interruttore permanente equivalente.
+Va lasciato a `false` (controllo GPS attivo): per le prove da casa conviene usare
+`?nogps=1`, che ottiene lo stesso risultato senza toccare il codice.
 
 Il nome del negozio finale ("Aromisia") compare **solo** in `FINALE.revealTitle` /
 `FINALE.revealMessage`, mostrati esclusivamente dopo lo scan finale riuscito: il resto
@@ -93,6 +119,7 @@ come un'app installata.
 
 ```
 index.html              shell della SPA
+senza-gps/index.html     piano B: apre l'app con il controllo GPS disattivato
 css/style.css            tema visivo
 js/data.js               CONTENUTI del gioco (indizi, GPS, immagini) — file da editare
 js/geo.js                geolocalizzazione, calcolo distanza

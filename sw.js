@@ -3,11 +3,12 @@
 // Strategia: cache-first per gli asset noti, network-first con
 // fallback alla cache per tutto il resto.
 
-const CACHE_NAME = "caccia-tesoro-v4";
+const CACHE_NAME = "caccia-tesoro-v5";
 
 const CORE_ASSETS = [
   "./",
   "./index.html",
+  "./senza-gps/index.html",
   "./css/style.css",
   "./js/data.js",
   "./js/geo.js",
@@ -50,7 +51,7 @@ self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
 
   event.respondWith(
-    caches.match(event.request).then((cached) => {
+    caches.match(event.request, { ignoreSearch: true }).then((cached) => {
       const fetchPromise = fetch(event.request)
         .then((response) => {
           if (response && response.ok) {
