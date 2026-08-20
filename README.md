@@ -35,20 +35,21 @@ proprio nel momento che conta di più). Lo sblocco si basa su:
 Tutto il contenuto del gioco vive in **`js/data.js`**, l'unico file da modificare.
 
 Le coordinate GPS di tutte le tappe e del negozio finale sono già quelle **reali**
-(`CONFIG.testMode = false`). Cosa manca ancora, da sostituire quando disponibile:
+(`CONFIG.testMode = false`). Sono già stati caricati anche:
 
-1. **Screenshot dei percorsi** (`routeImages` di ogni tappa e di `FINALE`) — sono ancora
-   placeholder generati automaticamente in `assets/images/tratto-*.png`. Vanno sostituiti
-   con i 4 screenshot reali di Google Maps (i tratti dopo la Tappa 1, che invece non ha
+1. **Screenshot dei percorsi** (`routeImages` di ogni tappa e di `FINALE`) — le 4 mappe
+   reali in `assets/images/tratto-*.png` (i tratti dopo la Tappa 1, che invece non ha
    mappa: va trovata solo con l'indovinello iniziale).
-2. **Foto di riferimento** (`hintImage` di ogni tappa e di `FINALE`) — sono ancora
-   placeholder in `assets/images/tappaN-riferimento.png` / `finale-riferimento.png`.
-   Vanno sostituite con le foto reali degli elementi da inquadrare (stesso nome file, o
-   cambia i path in `data.js`). Nota: queste foto compaiono **solo** quando uno scan
-   fallisce, come aiuto — non vengono mai mostrate prima.
+2. **Foto di riferimento** (`hintImage` di ogni tappa e di `FINALE`) — foto reali in
+   `assets/images/tappa1..5-riferimento.png` (`tappa5` = il traguardo). Compaiono
+   **solo** quando uno scan fallisce, come aiuto — non vengono mai mostrate prima.
 3. I testi degli indizi (`clue`) sono già stati inseriti e leggermente corretti
    (punteggiatura/refusi) rispetto alle bozze fornite: rileggili e adattali se qualcosa
    non suona giusto.
+
+**Nota importante**: `CONFIG.skipGpsCheck` è attualmente `true` — il controllo GPS è
+disattivato per poter provare l'intero flusso da casa. **Va rimesso a `false` prima
+dell'evento vero**, altrimenti qualunque tappa si sblocca subito ovunque ci si trovi.
 
 Il nome del negozio finale ("Aromisia") compare **solo** in `FINALE.revealTitle` /
 `FINALE.revealMessage`, mostrati esclusivamente dopo lo scan finale riuscito: il resto

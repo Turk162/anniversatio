@@ -59,6 +59,9 @@ const Geo = (() => {
   // reason che spiega perché non è stato possibile verificare
   // (il chiamante decide comunque di procedere).
   async function checkTappaLocation(tappa) {
+    if (CONFIG.skipGpsCheck) {
+      return { ok: true, reason: "gps-disattivato-per-test" };
+    }
     if (!tappa || !tappa.gps) {
       return { ok: true, reason: "nessun-vincolo-gps" };
     }

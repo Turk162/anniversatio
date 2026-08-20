@@ -27,6 +27,12 @@ const CONFIG = {
   // Tutte le tappe hanno ormai coordinate reali fisse: modalità test
   // (auto-calibrazione sulla posizione attuale) disattivata.
   testMode: false,
+  // Se true, il controllo GPS è completamente disattivato (ogni tappa si
+  // sblocca subito, ovunque ci si trovi) — usalo per provare l'intero
+  // flusso da casa senza dover raggiungere le location reali. Le
+  // coordinate reali qui sotto restano intatte: rimetti a false prima
+  // dell'evento vero, è l'unico interruttore da cambiare.
+  skipGpsCheck: true,
   // Raggio di default (metri) entro cui il GPS "conferma" la tappa.
   // Ampio di proposito: il controllo GPS è volutamente permissivo e
   // non deve mai bloccare la sorpresa.
@@ -100,7 +106,7 @@ const FINALE = {
   targetHint:
     "Sei arrivata? Inquadra bene l'insegna del locale davanti a te per confermare di " +
     "essere nel posto giusto.",
-  hintImage: "assets/images/finale-riferimento.png",
+  hintImage: "assets/images/tappa5-riferimento.png",
   // Coordinata reale di Aromisia.
   gps: { lat: 40.1456941285958, lng: 18.491972559712774, radius: 80 },
   revealTitle: "Sei arrivata da Aromisia!",

@@ -3,7 +3,7 @@
 // Strategia: cache-first per gli asset noti, network-first con
 // fallback alla cache per tutto il resto.
 
-const CACHE_NAME = "caccia-tesoro-v2";
+const CACHE_NAME = "caccia-tesoro-v3";
 
 const CORE_ASSETS = [
   "./",
@@ -24,7 +24,7 @@ const CORE_ASSETS = [
   "./assets/images/tappa2-riferimento.png",
   "./assets/images/tappa3-riferimento.png",
   "./assets/images/tappa4-riferimento.png",
-  "./assets/images/finale-riferimento.png",
+  "./assets/images/tappa5-riferimento.png",
 ];
 
 self.addEventListener("install", (event) => {
