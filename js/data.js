@@ -50,7 +50,8 @@ const TAPPE = [
       "Inquadra bene l'elemento indicato dall'indizio: tienilo al centro del riquadro " +
       "e scatta quando è ben visibile e a fuoco.",
     routeImages: ["assets/images/tratto-0-1.png"],
-    gps: { useCurrentLocationAsTarget: true, radius: 80 },
+    // Coordinata reale di test fornita dall'utente (non più auto-calibrata).
+    gps: { lat: 40.379800, lng: 17.961010, radius: 80 },
   },
   {
     id: 2,
