@@ -99,6 +99,7 @@ const TAPPE = [
 
 const FINALE = {
   id: "finale",
+  title: "Il traguardo",
   routeImages: ["assets/images/tratto-4-negozio.png"],
   routeTitle: "Il traguardo",
   routeClue: "Ultimo tratto: segui il percorso fino al traguardo finale.",
