@@ -105,7 +105,7 @@ const TAPPE = [
     title: "Indizio n. 4",
     clue:
       "«Una vita raccolta in un luogo sacro, e un albero che la racconta nelle sue " +
-      "tortuose ramificazioni» mormora la signora Fletcher. «Inquadra l'ingresso, mia " +
+      "tortuose ramificazioni» mormora Jessica. «Inquadra l'ingresso, mia " +
       "cara, e se vuoi ricorda tutte le ramificazioni che tu e tuo marito avete vissuto " +
       "insieme.»",
     targetLabel: "L'ultima prova",
@@ -128,7 +128,7 @@ const FINALE = {
     "«Ci siamo, mia cara» dice la signora Fletcher richiudendo il taccuino di scatto. " +
     "«Ho messo insieme tutti gli indizi e ora so dove si nasconde il nostro regalo. " +
     "Prendi via Cenobio Basiliano, cerca sulla sinistra via Seminario e poi raggiungi " +
-    "Corso Garibaldi: credo che il numero sia di fronte al 16.»",
+    "Corso Garibaldi: credo che tu debba cercare di fronte al numero 16.»",
   targetLabel: "Il luogo della soluzione",
   targetHint:
     "Inquadra bene l'insegna del locale davanti a te: è qui che l'indagine si chiude.",
@@ -137,7 +137,7 @@ const FINALE = {
   gps: { lat: 40.1456941285958, lng: 18.491972559712774, radius: 80 },
   revealTitle: "Caso risolto: Aromisia!",
   revealMessage:
-    "«Il regalo non era mai scomparso, mia cara» sorride la signora Fletcher chiudendo il " +
+    "«Il regalo non era mai scomparso, mia cara» sorride Jessica chiudendo il " +
     "taccuino. «Aspettava soltanto che tu ripercorressi i luoghi giusti. Entra pure: da " +
     "qui in poi il caso non è più mio.»",
   // Ultima riga: qui la voce torna a essere quella vera.
