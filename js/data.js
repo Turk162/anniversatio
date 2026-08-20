@@ -61,9 +61,10 @@ const TAPPE = [
     // l'indovinello, come apertura del caso.
     clue:
       "«Si comincia sempre dal principio, mia cara» dice la signora Fletcher aprendo il " +
-      "taccuino. «C'è un ingresso, non lontano dagli alberi, che porta alla storia di un " +
-      "posto di mare pur partendo da un nome polveroso. Elementi diversi che si uniscono " +
-      "per creare una storia comune... chi ti ricorda?»",
+      "taccuino. «C'è un ingresso, una porta, non lontano dagli alberi, che conduce alla " +
+      "storia di una città di mare... pur portando un nome polveroso. Elementi diversi " +
+      "che si uniscono per creare una storia comune... sembra raccontare la vostra " +
+      "storia d'amore!»",
     targetLabel: "La prova da raccogliere",
     targetHint:
       "Tieni il soggetto al centro del riquadro e scatta: senza fotografia non c'è prova, " +
@@ -76,10 +77,10 @@ const TAPPE = [
     id: 2,
     title: "Indizio n. 2",
     clue:
-      "«Fu lunga la lotta contro il Pascià» annota la signora Fletcher, «ma pur sconfitti " +
-      "li ricordiamo, perché alla fine ci hanno creduto. Sconfitte, vittorie, difficoltà: " +
-      "tutto costruisce la memoria di una vita insieme. Anche la vostra, se posso " +
-      "permettermi.»",
+      "«Fu lunga la lotta degli otrantini contro il Pascià» annota Jessica, «ma pur " +
+      "sconfitti li ricordiamo, perché alla fine hanno vissuto. Sconfitte, vittorie, " +
+      "difficoltà: tutto costruisce la memoria di una vita insieme. Anche la vostra, se " +
+      "posso permettermi.»",
     targetLabel: "La prova da raccogliere",
     targetHint: "Anche qui: inquadra bene il soggetto al centro e scatta.",
     routeImages: ["assets/images/tratto-1-2.png"],
@@ -103,9 +104,10 @@ const TAPPE = [
     id: 4,
     title: "Indizio n. 4",
     clue:
-      "«Una vita raccolta in un luogo sacro, e un albero che la racconta» mormora la " +
-      "signora Fletcher. «Inquadra l'ingresso e, se vuoi, ricorda tutta quella passata " +
-      "insieme: nei dettagli si nasconde sempre la soluzione.»",
+      "«Una vita raccolta in un luogo sacro, e un albero che la racconta nelle sue " +
+      "tortuose ramificazioni» mormora la signora Fletcher. «Inquadra l'ingresso, mia " +
+      "cara, e se vuoi ricorda tutte le ramificazioni che tu e tuo marito avete vissuto " +
+      "insieme.»",
     targetLabel: "L'ultima prova",
     targetHint: "Ultima prova prima della soluzione: inquadra bene e scatta.",
     routeImages: ["assets/images/tratto-3-4.png"],
@@ -124,8 +126,9 @@ const FINALE = {
   routeImages: ["assets/images/tratto-4-negozio.png"],
   routeClue:
     "«Ci siamo, mia cara» dice la signora Fletcher richiudendo il taccuino di scatto. " +
-    "«Ho messo insieme tutti gli indizi e ora so dove si nasconde il nostro regalo. È a " +
-    "pochi passi da qui: segui il percorso fino in fondo.»",
+    "«Ho messo insieme tutti gli indizi e ora so dove si nasconde il nostro regalo. " +
+    "Prendi via Cenobio Basiliano, cerca sulla sinistra via Seminario e poi raggiungi " +
+    "Corso Garibaldi: credo che il numero sia di fronte al 16.»",
   targetLabel: "Il luogo della soluzione",
   targetHint:
     "Inquadra bene l'insegna del locale davanti a te: è qui che l'indagine si chiude.",
