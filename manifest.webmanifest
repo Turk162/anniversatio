@@ -1,7 +1,7 @@
 {
-  "name": "Caccia al Tesoro",
-  "short_name": "Caccia",
-  "description": "Una caccia al tesoro in 3 tappe",
+  "name": "La Signora in Giallo ad Otranto",
+  "short_name": "Il Mistero",
+  "description": "Il mistero del regalo scomparso — una caccia al tesoro in 4 indizi",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

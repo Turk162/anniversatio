@@ -1,9 +1,11 @@
-# Caccia al Tesoro — Web App d'Anniversario
+# La Signora in Giallo ad Otranto — Web App d'Anniversario
 
-Web app (PWA) mobile per guidare qualcuno attraverso una caccia al tesoro a Otranto:
-indizio iniziale (senza mappa) → Tappa 1 (Porta a Terra) → mappa → Tappa 2 (Monumento
-eroi e martiri 1480) → mappa → Tappa 3 (lampione sul Lungomare degli Eroi) → mappa →
-Tappa 4 (Cattedrale) → mappa → traguardo finale, il negozio Aromisia con il regalo.
+Web app (PWA) mobile: una caccia al tesoro a tema giallo — «Il mistero del regalo
+scomparso» — in cui la signora Fletcher accompagna la protagonista di indizio in
+indizio per le vie di Otranto. Percorso:
+Indizio n. 1 (senza mappa) → Porta a Terra → mappa → Indizio n. 2 (Monumento
+eroi e martiri 1480) → mappa → Indizio n. 3 (lampione sul Lungomare degli Eroi) →
+mappa → Indizio n. 4 (Cattedrale) → mappa → traguardo finale, il negozio Aromisia con il regalo.
 
 Ad ogni tappa si "inquadra" un dettaglio della strada con la fotocamera per sbloccare la
 successiva.
@@ -24,7 +26,7 @@ proprio nel momento che conta di più). Lo sblocco si basa su:
    inquadrando *qualcosa* (non uno schermo nero o un dito sull'obiettivo), per rinforzare
    la sensazione di scatto/riconoscimento senza vero object detection.
 3. **Messaggio + foto di aiuto sul fallimento** — se lo scan non va a buon fine, compare
-   "Sei proprio sicura? La signora Flethcher forse ti consiglierebbe di cercare questo:"
+   "Sei proprio sicura? La signora Fletcher forse ti consiglierebbe di cercare questo:"
    insieme a una foto di riferimento dell'elemento (campo `hintImage` di ogni tappa).
 4. **Fallback "hai bisogno di aiuto?"** — dopo un paio di tentativi o 20 secondi sulla
    schermata di scatto, compare sempre un link che sblocca comunque la tappa. Serve da
@@ -46,6 +48,10 @@ Le coordinate GPS di tutte le tappe e del negozio finale sono già quelle **real
 3. I testi degli indizi (`clue`) sono già stati inseriti e leggermente corretti
    (punteggiatura/refusi) rispetto alle bozze fornite: rileggili e adattali se qualcosa
    non suona giusto.
+4. **Copertina** (`INTRO.coverImage`) — attualmente un segnaposto a tema in
+   `assets/images/copertina.png`: va sostituito con la locandina reale (stesso nome
+   file). Se l'immagine manca o non si carica, la schermata di apertura mostra
+   automaticamente titolo e sottotitolo come testo, quindi non resta mai vuota.
 
 **Nota importante**: `CONFIG.skipGpsCheck` è attualmente `true` — il controllo GPS è
 disattivato per poter provare l'intero flusso da casa. **Va rimesso a `false` prima
@@ -95,7 +101,7 @@ js/app.js                macchina a stati che pilota le schermate
 manifest.webmanifest     manifest PWA ("aggiungi a schermata Home")
 sw.js                    service worker per funzionare anche con connessione scarsa
 .github/workflows/pages.yml   deploy automatico su GitHub Pages ad ogni push
-assets/images/           screenshot dei percorsi e foto di riferimento (placeholder, da sostituire)
+assets/images/           copertina, mappe dei percorsi e foto di riferimento
 assets/icons/            icone della PWA
 ```
 

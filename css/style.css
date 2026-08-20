@@ -63,7 +63,40 @@ h1, h2 {
 h1 {
   margin: 4px 0;
   color: var(--wine);
-  font-size: 1.8rem;
+  font-size: 1.55rem;
+  line-height: 1.2;
+}
+
+.cover-image {
+  width: calc(100% + 48px);
+  margin: -32px -24px 4px -24px;
+  display: block;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.subtitle {
+  margin: -6px 0 4px 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--rose);
+}
+
+.case-label {
+  margin: -8px 0 0 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.signature {
+  margin: 6px 0 0 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--wine);
 }
 
 h2 {
@@ -92,10 +125,17 @@ h2 {
   font-weight: 600;
 }
 
+/* L'indizio è presentato come una nota sul taccuino della signora
+   Fletcher: carta leggermente più scura, filetto dorato a sinistra. */
 .clue {
   font-size: 1rem;
-  line-height: 1.5;
+  line-height: 1.55;
   margin: 0 0 4px 0;
+  text-align: left;
+  background: #f4e9d6;
+  border-left: 4px solid var(--gold);
+  border-radius: 0 10px 10px 0;
+  padding: 14px 16px;
 }
 
 .btn {

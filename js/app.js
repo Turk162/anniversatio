@@ -56,15 +56,28 @@ const App = (() => {
   // -----------------------------------------------------------
 
   function screenIntro() {
+    // La copertina porta già stampato il titolo, quindi il titolo testuale
+    // resta nascosto finché l'immagine si carica. Se manca o non si carica,
+    // l'immagine si toglie di mezzo e il testo prende il suo posto: niente
+    // riquadro rotto e nessuna schermata senza titolo.
+    const hasCover = Boolean(INTRO.coverImage);
+    const cover = hasCover
+      ? `<img src="${INTRO.coverImage}" class="cover-image"
+             alt="${INTRO.title} — ${INTRO.subtitle}"
+             onerror="this.style.display='none';
+                      document.getElementById('intro-titles').classList.remove('hidden');" />`
+      : "";
+
     appEl.innerHTML = `
       <div class="screen screen-intro">
-        <div class="intro-heart">&#10084;</div>
-        <h1>Caccia al Tesoro</h1>
-        <p class="lead">${CONFIG.coupleNames}, un piccolo viaggio ti aspetta:
-          tre tappe, tre dettagli da scovare, un regalo alla fine del percorso.</p>
-        <p class="hint">Per giocare servirà accesso a fotocamera e posizione:
-          sono usati solo per guidarti lungo il percorso, qui, ora.</p>
-        <button class="btn btn-primary" id="btn-start">Inizia il viaggio</button>
+        ${cover}
+        <div id="intro-titles" class="${hasCover ? "hidden" : ""}">
+          <h1>${INTRO.title}</h1>
+          <p class="subtitle">${INTRO.subtitle}</p>
+        </div>
+        <p class="lead">${INTRO.lead}</p>
+        <p class="hint">${INTRO.hint}</p>
+        <button class="btn btn-primary" id="btn-start">${INTRO.startButton}</button>
         ${CONFIG.testMode ? '<p class="test-badge">Modalità TEST attiva</p>' : ""}
       </div>
     `;
@@ -74,7 +87,8 @@ const App = (() => {
   async function onStart() {
     // Richiesta "calda" del permesso di posizione, così viene concesso
     // subito. Non blocchiamo mai il gioco se viene negato.
-    appEl.innerHTML = `<div class="screen screen-loading"><div class="spinner"></div><p>Un attimo…</p></div>`;
+    appEl.innerHTML = `<div class="screen screen-loading"><div class="spinner"></div>
+      <p>La signora Fletcher prepara il taccuino…</p></div>`;
     await Geo.requestPermissionEarly();
     setState({ started: true, stageIndex: 0, phase: "route", attempts: 0 });
   }
@@ -92,7 +106,7 @@ const App = (() => {
           ${images.map((src) => `<img src="${src}" alt="Percorso" class="route-img" />`).join("")}
         </div>
         <button class="btn btn-primary" id="btn-arrived">
-          ${isFinal ? "Sono arrivata al traguardo" : "Sono arrivata, voglio inquadrare"}
+          ${isFinal ? "Sono sul posto" : "Sono sul posto, raccolgo la prova"}
         </button>
       </div>
     `;
@@ -127,9 +141,9 @@ const App = (() => {
         </div>
         <p id="scan-feedback" class="scan-feedback"></p>
         <img id="hint-image" class="hint-image hidden" alt="Suggerimento" />
-        <button class="btn btn-primary" id="btn-shoot">Inquadra e scatta</button>
+        <button class="btn btn-primary" id="btn-shoot">Fotografa la prova</button>
         <p id="help-link" class="help-link hidden">
-          <a href="#" id="link-help">Qualcosa non va? Continua comunque →</a>
+          <a href="#" id="link-help">La signora Fletcher ti passa la soluzione →</a>
         </p>
       </div>
     `;
@@ -169,7 +183,7 @@ const App = (() => {
     btnShoot.addEventListener("click", async () => {
       btnShoot.disabled = true;
       feedback.classList.remove("error");
-      feedback.textContent = "Sto analizzando…";
+      feedback.textContent = "La signora Fletcher esamina la prova…";
       hintImage.classList.add("hidden");
 
       // piccola pausa per dare la sensazione di un'analisi reale
@@ -181,12 +195,12 @@ const App = (() => {
 
       if (success) {
         feedback.classList.remove("error");
-        feedback.textContent = "Trovato! ✓";
+        feedback.textContent = "Prova confermata! ✓";
         setTimeout(() => advance(), 500);
       } else {
         state.attempts += 1;
         feedback.textContent =
-          "Sei proprio sicura? La signora Flethcher forse ti consiglierebbe di cercare questo: ";
+          "Sei proprio sicura? La signora Fletcher forse ti consiglierebbe di cercare questo: ";
         feedback.classList.add("error");
         if (item.hintImage) {
           hintImage.src = item.hintImage;
@@ -209,20 +223,26 @@ const App = (() => {
   }
 
   function screenSuccess(tappa) {
+    const next = state.stageIndex + 1;
+    const isLastTappa = next >= TAPPE.length;
+
     appEl.innerHTML = `
       <div class="screen screen-success">
         <div class="success-check">&#10003;</div>
-        <h2>${tappa.title} completata!</h2>
-        <p class="lead">Hai trovato il dettaglio giusto.</p>
-        <button class="btn btn-primary" id="btn-continue">Continua</button>
+        <h2>Prova archiviata</h2>
+        <p class="case-label">${tappa.title}</p>
+        <p class="lead">«Ottimo lavoro, mia cara.» La signora Fletcher annota tutto sul
+          taccuino e ti fa cenno di proseguire.</p>
+        <button class="btn btn-primary" id="btn-continue">
+          ${isLastTappa ? "Vai alla soluzione" : "Prossimo indizio"}
+        </button>
       </div>
     `;
     document.getElementById("btn-continue").addEventListener("click", () => {
-      const next = state.stageIndex + 1;
-      if (next < TAPPE.length) {
-        setState({ stageIndex: next, phase: "route" });
-      } else {
+      if (isLastTappa) {
         setState({ stageIndex: TAPPE.length, phase: "final-route" });
+      } else {
+        setState({ stageIndex: next, phase: "route" });
       }
     });
   }
@@ -233,6 +253,7 @@ const App = (() => {
         <div class="intro-heart">&#10084;</div>
         <h1>${FINALE.revealTitle}</h1>
         <p class="lead">${FINALE.revealMessage}</p>
+        ${FINALE.revealSignature ? `<p class="signature">${FINALE.revealSignature}</p>` : ""}
       </div>
     `;
   }
