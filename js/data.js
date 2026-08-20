@@ -33,9 +33,14 @@ const CONFIG = {
   // dell'evento vero, è l'unico interruttore da cambiare.
   skipGpsCheck: false,
   // Raggio di default (metri) entro cui il GPS "conferma" la tappa.
-  // Ampio di proposito: il controllo GPS è volutamente permissivo e
-  // non deve mai bloccare la sorpresa.
-  defaultRadius: 80,
+  // 40 m è un compromesso: le tappe reali distano tra loro 63, 87, 112
+  // e 105 metri, quindi con un raggio più largo (es. 80) le prime due
+  // si sovrapponevano e il controllo non verificava più lo spostamento.
+  // Nei vicoli del centro storico l'errore GPS può però arrivare a
+  // 20-50 m, quindi qualche "riprova" è messa in conto: la rete di
+  // sicurezza è il link di soccorso dopo 2 tentativi (o 20 secondi) e,
+  // in caso di GPS davvero inaffidabile, il piano B in senza-gps/.
+  defaultRadius: 40,
 };
 
 // -------------------------------------------------------------
@@ -96,7 +101,7 @@ const TAPPE = [
       "e senza prova non si va avanti.",
     routeImages: [],
     hintImage: "assets/images/tappa1-riferimento.png",
-    gps: { lat: 40.14640176241202, lng: 18.490193677702766, radius: 80 },
+    gps: { lat: 40.14640176241202, lng: 18.490193677702766, radius: 40 },
   },
   {
     id: 2,
@@ -110,7 +115,7 @@ const TAPPE = [
     targetHint: "Anche qui: inquadra bene il soggetto al centro e scatta.",
     routeImages: ["assets/images/tratto-1-2.png"],
     hintImage: "assets/images/tappa2-riferimento.png",
-    gps: { lat: 40.14686328063995, lng: 18.49063147061505, radius: 80 },
+    gps: { lat: 40.14686328063995, lng: 18.49063147061505, radius: 40 },
   },
   {
     id: 3,
@@ -123,7 +128,7 @@ const TAPPE = [
     targetHint: "Inquadra bene il soggetto al centro e scatta.",
     routeImages: ["assets/images/tratto-2-3.png"],
     hintImage: "assets/images/tappa3-riferimento.png",
-    gps: { lat: 40.14655642930042, lng: 18.49156803696568, radius: 80 },
+    gps: { lat: 40.14655642930042, lng: 18.49156803696568, radius: 40 },
   },
   {
     id: 4,
@@ -137,7 +142,7 @@ const TAPPE = [
     targetHint: "Ultima prova prima della soluzione: inquadra bene e scatta.",
     routeImages: ["assets/images/tratto-3-4.png"],
     hintImage: "assets/images/tappa4-riferimento.png",
-    gps: { lat: 40.14577479315327, lng: 18.49073716764695, radius: 80 },
+    gps: { lat: 40.14577479315327, lng: 18.49073716764695, radius: 40 },
   },
 ];
 
@@ -159,7 +164,7 @@ const FINALE = {
     "Inquadra bene l'insegna del locale davanti a te: è qui che l'indagine si chiude.",
   hintImage: "assets/images/tappa5-riferimento.png",
   // Coordinata reale di Aromisia.
-  gps: { lat: 40.1456941285958, lng: 18.491972559712774, radius: 80 },
+  gps: { lat: 40.1456941285958, lng: 18.491972559712774, radius: 40 },
   revealTitle: "Caso risolto: Aromisia!",
   revealMessage:
     "«Il regalo non era mai scomparso, mia cara» sorride Jessica chiudendo il " +

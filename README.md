@@ -19,9 +19,12 @@ Non c'è vero riconoscimento immagine via intelligenza artificiale (sarebbe frag
 proprio nel momento che conta di più). Lo sblocco si basa su:
 
 1. **GPS "soft"** — se il telefono è entro un certo raggio dalle coordinate reali della
-   tappa (attualmente 80 metri, volutamente generoso), la posizione è considerata
-   confermata. Il controllo **non blocca mai** il gioco: se il permesso è negato o il
-   segnale è impreciso, resta comunque possibile sbloccare tramite il fallback di aiuto.
+   tappa (**40 metri**), la posizione è considerata confermata. Il raggio è stretto di
+   proposito: le tappe reali distano tra loro 63, 87, 112 e 105 metri, quindi con un
+   raggio più largo (es. 80 m) le prime due si sovrapponevano e il controllo non
+   verificava più lo spostamento. Il controllo **non blocca mai** il gioco: se il permesso
+   è negato o il segnale è impreciso, resta comunque possibile sbloccare tramite il
+   fallback di aiuto — o passare al piano B qui sotto.
 2. **Euristica sull'inquadratura** (`js/camera.js`) — verifica solo che la fotocamera stia
    inquadrando *qualcosa* (non uno schermo nero o un dito sull'obiettivo), per rinforzare
    la sensazione di scatto/riconoscimento senza vero object detection.
