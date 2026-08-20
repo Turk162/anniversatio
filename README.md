@@ -49,7 +49,10 @@ Quando potrai raggiungere le location reali:
 3. Scrivi i testi reali degli indizi (`clue`, `targetLabel`, `targetHint`).
 4. Sostituisci le immagini placeholder in `assets/images/` con i veri screenshot dei
    percorsi (stesso nome file, oppure cambia i percorsi in `routeImages`).
-5. Compila `FINALE` con il percorso verso il negozio e il messaggio finale.
+5. Compila `FINALE` con il percorso verso il negozio, i testi generici di percorso/scan
+   (`routeClue`, `targetHint`) e il messaggio di rivelazione (`revealTitle`,
+   `revealMessage`) — questi ultimi sono gli unici punti dove compare il nome del
+   negozio: il resto del flusso non lo anticipa mai, nemmeno durante lo scan finale.
 
 Per azzerare il progresso salvato durante un test, apri la console del browser e lancia:
 ```js

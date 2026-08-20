@@ -77,9 +77,18 @@ const TAPPE = [
 ];
 
 const FINALE = {
+  id: "finale",
   routeImages: ["assets/images/tratto-3-negozio.png"],
-  title: "Sei arrivata!",
-  message:
-    "Hai seguito ogni indizio, hai trovato ogni dettaglio nascosto: ora il tuo regalo " +
-    "ti sta aspettando qui dentro. Buon anniversario, amore mio.",
+  routeTitle: "Il traguardo",
+  routeClue: "Ultimo tratto: segui il percorso fino al traguardo finale.",
+  targetLabel: "Il traguardo",
+  targetHint:
+    "Sei arrivata? Inquadra bene l'insegna del locale davanti a te per confermare di " +
+    "essere nel posto giusto.",
+  // Stesso meccanismo soft delle altre tappe: non blocca mai il gioco.
+  gps: { useCurrentLocationAsTarget: true, radius: 80 },
+  revealTitle: "Sei arrivata da Aromisia!",
+  revealMessage:
+    "Hai seguito ogni indizio, hai trovato ogni dettaglio nascosto: il tuo regalo ti sta " +
+    "aspettando qui dentro. Buon anniversario, amore mio.",
 };

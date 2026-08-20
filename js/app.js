@@ -9,7 +9,7 @@ const App = (() => {
   const defaultState = {
     started: false,
     stageIndex: 0, // indice in TAPPE
-    phase: "route", // 'route' | 'scan' | 'success' | 'final-route' | 'final'
+    phase: "route", // 'route' | 'scan' | 'success' | 'final-route' | 'final-scan' | 'final'
     attempts: 0,
     scanEnteredAt: null,
   };
@@ -81,10 +81,8 @@ const App = (() => {
 
   function screenRoute(tappa, isFinal) {
     const images = (isFinal ? FINALE.routeImages : tappa.routeImages) || [];
-    const title = isFinal ? FINALE.title : tappa.title;
-    const clue = isFinal
-      ? "Ultimo passo: segui il percorso fino al negozio che ti aspetta."
-      : tappa.clue;
+    const title = isFinal ? FINALE.routeTitle : tappa.title;
+    const clue = isFinal ? FINALE.routeClue : tappa.clue;
 
     appEl.innerHTML = `
       <div class="screen screen-route">
@@ -94,25 +92,30 @@ const App = (() => {
           ${images.map((src) => `<img src="${src}" alt="Percorso" class="route-img" />`).join("")}
         </div>
         <button class="btn btn-primary" id="btn-arrived">
-          ${isFinal ? "Sono arrivata al negozio" : "Sono arrivata, voglio inquadrare"}
+          ${isFinal ? "Sono arrivata al traguardo" : "Sono arrivata, voglio inquadrare"}
         </button>
       </div>
     `;
     document.getElementById("btn-arrived").addEventListener("click", () => {
       if (isFinal) {
-        setState({ phase: "final" });
+        setState({ phase: "final-scan", attempts: 0, scanEnteredAt: Date.now() });
       } else {
         setState({ phase: "scan", attempts: 0, scanEnteredAt: Date.now() });
       }
     });
   }
 
-  async function screenScan(tappa) {
+  // Schermata di scansione generica, condivisa dalle tappe 1-3 e dallo
+  // scan finale davanti al negozio: stessa dinamica (fotocamera, reticolo,
+  // check GPS soft, euristica di plausibilità, fallback "aiuto"), diverso
+  // solo il contenuto (title/targetLabel/targetHint/gps) e cosa succede
+  // dopo lo sblocco (onSuccess).
+  async function renderScanScreen(item, onSuccess) {
     appEl.innerHTML = `
       <div class="screen screen-scan">
-        <h2>${tappa.title}</h2>
-        <p class="target-label">${tappa.targetLabel}</p>
-        <p class="target-hint">${tappa.targetHint}</p>
+        <h2>${item.title}</h2>
+        <p class="target-label">${item.targetLabel}</p>
+        <p class="target-hint">${item.targetHint}</p>
         <div class="camera-wrap">
           <video id="camera-video" playsinline autoplay muted></video>
           <div class="reticle">
@@ -135,9 +138,15 @@ const App = (() => {
     const btnShoot = document.getElementById("btn-shoot");
     const helpLink = document.getElementById("help-link");
 
+    const advance = () => {
+      clearTimeout(helpTimer);
+      Camera.stop();
+      onSuccess();
+    };
+
     document.getElementById("link-help").addEventListener("click", (e) => {
       e.preventDefault();
-      advanceAfterScan();
+      advance();
     });
 
     // Timer di cortesia: dopo 20s sullo schermo di scansione mostriamo
@@ -164,13 +173,13 @@ const App = (() => {
       await new Promise((r) => setTimeout(r, 1400));
 
       const plausibility = Camera.capturePlausibility();
-      const geoResult = await Geo.checkTappaLocation(tappa);
+      const geoResult = await Geo.checkTappaLocation(item);
       const success = plausibility.plausible && geoResult.ok;
 
       if (success) {
         feedback.classList.remove("error");
         feedback.textContent = "Trovato! ✓";
-        setTimeout(() => advanceAfterScan(), 500);
+        setTimeout(() => advance(), 500);
       } else {
         state.attempts += 1;
         feedback.textContent = "Non sono riuscita a riconoscerlo bene, riprova inquadrando meglio.";
@@ -183,10 +192,12 @@ const App = (() => {
     });
   }
 
-  function advanceAfterScan() {
-    clearTimeout(helpTimer);
-    Camera.stop();
-    setState({ phase: "success" });
+  function screenScan(tappa) {
+    renderScanScreen(tappa, () => setState({ phase: "success" }));
+  }
+
+  function screenFinalScan() {
+    renderScanScreen(FINALE, () => setState({ phase: "final" }));
   }
 
   function screenSuccess(tappa) {
@@ -212,8 +223,8 @@ const App = (() => {
     appEl.innerHTML = `
       <div class="screen screen-final">
         <div class="intro-heart">&#10084;</div>
-        <h1>${FINALE.title}</h1>
-        <p class="lead">${FINALE.message}</p>
+        <h1>${FINALE.revealTitle}</h1>
+        <p class="lead">${FINALE.revealMessage}</p>
       </div>
     `;
   }
@@ -223,9 +234,9 @@ const App = (() => {
   // -----------------------------------------------------------
 
   function render() {
-    // se usciamo dalla schermata di scan, assicuriamoci che la
+    // se usciamo da una schermata di scan, assicuriamoci che la
     // fotocamera venga sempre rilasciata
-    if (state.phase !== "scan") {
+    if (state.phase !== "scan" && state.phase !== "final-scan") {
       Camera.stop();
     }
 
@@ -241,7 +252,8 @@ const App = (() => {
       else if (state.phase === "success") screenSuccess(tappa);
       else screenRoute(tappa, false);
     } else {
-      if (state.phase === "final") screenFinal();
+      if (state.phase === "final-scan") screenFinalScan();
+      else if (state.phase === "final") screenFinal();
       else screenRoute(null, true);
     }
   }
